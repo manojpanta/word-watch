@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width" />
 </head>
 
-<body>
+<body onload="fetchTopWord()">
   <main>
     <section class="text-submission">
       <h2 tabindex="0">Word <span>Watch</span> 👀</h2>
@@ -17,16 +17,30 @@
 
     <section class="word-data" tabindex="0">
       <article class="top-word">
-        <h3>Top word from Word Watch API: </h3>
-        <div class='top words'>
-
-        </div>
-
+        <h3 id='top-word-from-api'>Top word from Word Watch API: </h3>
       </article>
       <article class="word-count" tabindex="0">
+        <h4 id='top-word-count-from-api'>Word Count: </h4>
       </article>
     </section>
   </main>
 </body>
+
+
+<script type="text/javascript">
+  function fetchTopWord() {
+    fetch("https://cors-anywhere.herokuapp.com/https://wordwatch-api.herokuapp.com/api/v1/top_word")
+      .then(async result => {
+        var wordAndCount = await result.json();
+        var word = Object.keys(wordAndCount["word"])[0]
+        var count = Object.values(wordAndCount["word"])[0]
+        document.getElementById('top-word-from-api').innerHTML = "Top word from Word Watch API:" + `${word}`;
+        document.getElementById('top-word-count-from-api').innerHTML = "Word Count:" + `${count}`;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+</script>
 
 </html>
