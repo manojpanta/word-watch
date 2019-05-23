@@ -11,13 +11,16 @@
   <main>
     <section class="text-submission">
       <h2 tabindex="0">Word <span>Watch</span> 👀</h2>
-      <textarea placeholder="Paste text here"></textarea>
-      <button>Break down</button>
+      <textarea placeholder="Paste text here" id="input-value"></textarea>
+      <button onclick="addToMaster()">Break down</button>
     </section>
 
     <section class="word-data" tabindex="0">
       <article class="top-word">
         <h3 id='top-word-from-api'>Top word from Word Watch API: </h3>
+        <ul id='notification'>
+          <li id='notify_user' style="display:none;"></li>
+          <ul>
       </article>
       <article class="word-count" tabindex="0">
         <h4 id='top-word-count-from-api'>Word Count: </h4>
@@ -29,13 +32,43 @@
 
 <script type="text/javascript">
   function fetchTopWord() {
-    fetch("https://cors-anywhere.herokuapp.com/https://wordwatch-api.herokuapp.com/api/v1/top_word")
+    fetch("https://wordwatch-api.herokuapp.com/api/v1/top_word")
       .then(async result => {
         var wordAndCount = await result.json();
         var word = Object.keys(wordAndCount["word"])[0]
         var count = Object.values(wordAndCount["word"])[0]
         document.getElementById('top-word-from-api').innerHTML = "Top word from Word Watch API:" + `${word}`;
         document.getElementById('top-word-count-from-api').innerHTML = "Word Count:" + `${count}`;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  };
+
+  function addToMaster() {
+    var value = document.getElementById('input-value').value;
+    console.log(value);
+    var opts = {
+      word: {
+        value: value
+      }
+    }
+    fetch('https://wordwatch-api.herokuapp.com/api/v1/words', {
+        method: 'post',
+        headers: {
+          'content-type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(opts)
+      })
+      .then(async response => {
+        var result = await response.json()
+        console.log(result);
+        document.getElementById('notify_user').style.display = "inline";
+        document.getElementById('notify_user').style.marginTop = "300px";
+        document.getElementById('notify_user').style.padding = "100px";
+        document.getElementById('notify_user').innerHTML = result["message"];
+        console.log(result);
       })
       .catch(error => {
         console.log(error);
