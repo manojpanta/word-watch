@@ -76,3 +76,6 @@ npm test
 
 * Documentation can be found [here](https://github.com/turingschool-examples/word-watch-api)
 * You can choose if you want to use ther Heroku API, or run the API locally. If you are using the Heroku API, remember that a lot of other students may be as well, so you'll have less control over if that top word is changing, etc. 
+
+## FE Mini Project Done
+* Deployed link here: https://manojpanta.github.io/word-watch/docs/
